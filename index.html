@@ -1,10 +1,646 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="es">
 <head>
-  <title>Mi Primera Página</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>David — Cloud Engineer | Portfolio</title>
+  <meta name="description" content="Portfolio de David — Cloud Engineer. Proyectos, skills, certificaciones y contacto." />
+  <style>
+    /* ---------------------------
+       Reset + base
+       --------------------------- */
+    :root{
+      --bg:#071028; /* deep navy */
+      --blue-1:#0b66c3;
+      --blue-2:#1e90ff;
+      --accent:#2fb1ff;
+      --glass: rgba(255,255,255,0.06);
+      --card: rgba(255,255,255,0.03);
+      --text:#e6f2ff;
+      --muted: #b6d4ff;
+      --radius:16px;
+      --max-width:1100px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: radial-gradient(ellipse at 10% 10%, rgba(47,177,255,0.05), transparent 5%),
+                  radial-gradient(ellipse at 90% 80%, rgba(11,102,195,0.06), transparent 7%),
+                  var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+      padding:40px 20px;
+    }
+    /* Cloud animated background */
+    .sky{
+      position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;
+    }
+    .cloud{
+      position:absolute;
+      top:10%;
+      left:-20%;
+      width:420px;height:120px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.06));
+      border-radius:80px;
+      filter:blur(8px);
+      opacity:0.8;
+      animation:float-cloud 60s linear infinite;
+    }
+    .cloud:nth-child(2){width:300px;height:90px;top:30%;left:-30%;animation-duration:80s;opacity:0.6}
+    .cloud:nth-child(3){width:520px;height:160px;top:60%;left:-40%;animation-duration:100s;opacity:0.55}
+    @keyframes float-cloud{ to{transform:translateX(200vw)} }
+
+    /* Layout container */
+    .container{
+      max-width:var(--max-width);margin:0 auto;display:flex;flex-direction:column;gap:36px;
+    }
+
+    /* Header / Nav */
+    header{
+      display:flex;justify-content:space-between;align-items:center;gap:16px;
+    }
+    .brand{display:flex;gap:12px;align-items:center}
+    .avatar{
+      width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--blue-1),var(--blue-2));
+      display:grid;place-items:center;font-weight:700;color:white;font-size:20px;box-shadow:0 6px 18px rgba(11,102,195,0.25);
+    }
+    nav{display:flex;gap:14px;align-items:center}
+    nav a{
+      color:var(--muted);text-decoration:none;padding:8px 10px;border-radius:8px;font-weight:600;font-size:14px
+    }
+    nav a:hover{background:var(--glass);color:var(--text)}
+    .cta{background:linear-gradient(90deg,var(--blue-1),var(--blue-2));padding:8px 12px;border-radius:10px;color:white;text-decoration:none;font-weight:700}
+
+    /* Hero */
+    .hero{
+      display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center;padding:28px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border-radius:var(--radius);
+      box-shadow: 0 6px 30px rgba(2,6,23,0.6);
+    }
+    .hero h1{font-size:34px;margin-bottom:6px}
+    .hero p.lead{color:var(--muted);margin-bottom:12px}
+    .role{display:inline-block;background:rgba(47,177,255,0.12);padding:6px 10px;border-radius:999px;color:var(--accent);font-weight:700;margin-bottom:12px}
+    .buttons{display:flex;gap:12px}
+    .btn{padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:700}
+    .btn-outline{border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+
+    /* Cards grid for projects/skills/certs */
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .card{background:var(--card);padding:18px;border-radius:12px;min-height:120px}
+    .small{min-height:80px}
+
+    /* Sections */
+    section{scroll-margin-top:24px}
+    h2{font-size:20px;margin-bottom:10px}
+    .muted{color:var(--muted);font-size:14px}
+
+    /* Projects list */
+    .project{display:flex;flex-direction:column;gap:8px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:16px;border-radius:12px}
+    .project .meta{display:flex;gap:8px;align-items:center}
+    .tech{font-size:13px;color:var(--muted);padding:4px 8px;border-radius:8px;background:rgba(255,255,255,0.02)}
+
+    /* Skills badges */
+    .badges{display:flex;flex-wrap:wrap;gap:10px}
+    .badge{background:rgba(255,255,255,0.03);padding:8px 10px;border-radius:8px;font-weight:700}
+
+    /* Contact */
+    .contact-form{display:grid;gap:10px}
+    input,textarea{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px;border-radius:8px;color:var(--text)}
+    button[type=submit]{background:linear-gradient(90deg,var(--blue-1),var(--blue-2));color:white;padding:10px 12px;border-radius:10px;border:0;font-weight:700}
+
+    /* Footer */
+    footer{display:flex;justify-content:center;align-items:center;padding-top:8px;color:var(--muted);font-size:14px}
+
+    /* Certs: estructura y control de imágenes */
+    #certs .certs-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    #skills .skills-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .cert-card {
+      flex: 1;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: var(--card);
+      padding: 12px;
+      border-radius: 12px;
+      min-height: 120px;
+      overflow: hidden; /* evita que la imagen sobresalga */
+    }
+
+    /* Bloque específico para la imagen dentro del card */
+    .cert-card .bloque1 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-top: 6px;
+      padding-bottom: 6px;
+    }
+
+    /* Control rígido sobre la imagen: responsiva y contenedora */
+    .cert-card .bloque1 img {
+      display: block;
+      width: auto;
+      max-width: 140px;   /* ajusta el tamaño máximo horizontal */
+      max-height: 80px;   /* ajusta el tamaño máximo vertical */
+      height: auto;
+      object-fit: contain; /* mantiene proporción sin recortar */
+    }
+
+    /* Animations */
+    .fade-up{opacity:0;transform:translateY(8px);animation:enter .9s forwards}
+    .delay-1{animation-delay:.07s}
+    .delay-2{animation-delay:.14s}
+    .delay-3{animation-delay:.21s}
+    @keyframes enter{to{opacity:1;transform:none}}
+
+    /* Responsive */
+    @media (max-width:900px){
+      .hero{grid-template-columns:1fr;}
+      .grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width:600px){
+      header{flex-direction:column;align-items:flex-start;gap:14px}
+      nav{display:none}
+      .hero{padding:18px}
+      .grid{grid-template-columns:1fr}
+      .container{padding-bottom:60px}
+    }
+
+    /* Floating subtle icons (cloud + gear) */
+    .hero-visual{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+    .visual-card{width:320px;height:320px;border-radius:20px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+    .cloud-illustration{width:160px;height:80px}
+
+    /* small helpers */
+    .light{color:var(--muted);font-size:13px}
+    a.social{color:var(--muted);text-decoration:none;font-weight:700}
+  </style>
 </head>
 <body>
-  <h1>¡Hola Mundo!</h1>
-  <p>Bienvenido a mi página web en GitHub Pages.</p>
+  <div class="sky" aria-hidden="true">
+    <div class="cloud" style="top:6%;left:-30%"></div>
+    <div class="cloud" style="top:36%;left:-40%"></div>
+    <div class="cloud" style="top:66%;left:-50%"></div>
+  </div>
+
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="avatar" aria-hidden="true">D</div>
+        <div>
+          <div style="font-weight:800">David Botella Nicolás</div>
+          <div class="light">Cloud Engineer — aspirando a Cloud Security & DevOps</div>
+        </div>
+      </div>
+      <nav aria-label="Navegación principal">
+        <a href="#about">Sobre mí</a>
+        <a href="#projects">Proyectos</a>
+        <a href="#skills">Habilidades</a>
+        <a href="#certs">Certificaciones</a>
+        <a href="#contact" class="cta">Contacto</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero fade-up delay-1" id="home" aria-labelledby="hero-title">
+        <div>
+          <span class="role">Cloud Engineer</span>
+          <h1 id="hero-title">Hola, soy David — construyendo infra fiable y segura en la nube</h1>
+          <p class="lead">Me especializo en diseño y operación de infra cloud, automatización con IaC y estoy migrando mi carrera hacia Cloud Security y prácticas DevOps. Trabajo con AWS / Azure / GCP, contenedores y pipelines CI/CD.</p>
+          <div class="buttons">
+            <a class="btn cta" href="#projects">Ver proyectos</a>
+            <a class="btn btn-outline" href="#contact">Contactar</a>
+          </div>
+
+          <div style="margin-top:18px" class="light">GitHub: <strong><a class="social" href="https://github.com/CyberShield22">CyberShield22</a></strong> · LinkedIn: <strong><a class="social" href="https://www.linkedin.com/in/david-botella-nicol%C3%A1s-1735992b2/">David Botella Nicolás</a></strong> · Credly: <strong><a class="social" href="https://www.credly.com/users/david-botella-nicolas">David Botella Nicolás</a></strong></div>
+        </div>
+      <aside class="hero-visual">
+        <div class="visual-card" style="overflow:hidden; justify-content:center;">
+          <!-- Aquí irá tu foto -->
+          <img src="./images/foto_perfil.png" alt="Foto de David Botella Nicolás" 
+          style="width:100%; height:100%; object-fit:cover; object-position:center top; border-radius:20px;"/>
+        </div>
+      </aside>
+      
+      
+      </section>
+
+      <section id="about" class="fade-up delay-2" aria-labelledby="about-title">
+        <h2 id="about-title">Sobre mí</h2>
+        <div class="card">
+          <p class="muted">Soy David, Cloud Engineer con experiencia en desplegar y operar infraestructuras en la nube. Me apasiona la seguridad en la nube y las prácticas DevOps, incluyendo infraestructuras como código, pipelines de CI/CD, contenedores y observabilidad. Trabajo con herramientas y plataformas como Terraform, Docker, Kubernetes y las principales nubes públicas. Actualmente, estoy enfocando mi carrera hacia el rol de Cloud Security Engineer, combinando experiencia en cloud con un fuerte enfoque en seguridad y buenas prácticas operativas.</p>
+        </div>
+      </section>
+
+      <section id="projects" class="fade-up delay-3" aria-labelledby="projects-title">
+        <h2 id="projects-title">Proyectos</h2>
+        <p class="muted">Tres proyectos destacados. Reemplaza los textos y enlaces por los tuyos.</p>
+
+        <div style="display:grid;gap:12px;margin-top:12px">
+          <!-- Project 1 -->
+          <article class="project">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <div style="font-weight:800">Proyecto 1 — Implantación de un sistema monitorización de red y análisis de logs en tiempo real</div>
+                <div class="muted">Descripción breve: Diseño e implementación de una infraestructura completa en Ubuntu Server con DHCP, DNS, NGINX y NAT, integrando la pila ELK (Elasticsearch, Logstash, Kibana) y Filebeat para la recolección y visualización de logs en tiempo real.</div>
+                <img src="images/Arquitectura_Proyecto_1.png" alt="Arquitectura" style="max-width: 400px; width: 100%; height: auto; display: block; margin: 10px auto 0;">
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+                <div class="tech">Linux · DHCP · DNS · NGINX · NAT · ELK Stack</div>
+                <a class="social" href="https://github.com/CyberShield22/elk-infrastructure-ubuntu.git">GitHub</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 2 -->
+          <article class="project">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <div style="font-weight:800">Proyecto 2 — Instalación y configuración de WireGuard</div>
+                <div class="muted">Descripción breve: Instalación y configuración completa de un servidor VPN WireGuard en Linux, con integración de clientes en Windows, Linux y Android. Incluye generación de claves, definición de rutas, ajustes de firewall y validación de conectividad para garantizar un acceso remoto seguro y eficiente.</div>
+                <img src="images/Arquitectura_Proyecto_2.png" alt="Arquitectura" style="max-width: 400px; width: 100%; height: auto; display: block; margin: 10px auto 0;">
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+                <div class="tech">Linux · Firewall · Redes</div>
+                <a class="social" href="https://github.com/CyberShield22/wireguard-instalacion-configuracion">GitHub</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 3 -->
+          <article class="project">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <div style="font-weight:800">Proyecto 3 — Infraestructura Cloud Autosuficiente con Terraform y GitHub Actions</div>
+                <div class="muted">Descripción breve: Infraestructura completa desplegada con Terraform sobre AWS/Azure/GCP, utilizando módulos reutilizables, backend remoto y pipelines CI/CD en GitHub Actions para automatizar despliegues multi-entorno.</div>
+                <img src="images/terraform-aws-architecture.drawio.png" alt="Arquitectura" style="max-width: 400px; width: 100%; height: auto; display: block; margin: 10px auto 0;">
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+                <div class="tech">AWS · Terraform · GitHub Actions</div>
+                <a class="social" href="https://github.com/CyberShield22/terraform-aws-infrastructure">GitHub</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="skills" class="fade-up delay-3" style="margin-top:18px">
+        <h2>Habilidades</h2>
+        <p class="muted">Habilidades técnicas y herramientas.</p>
+        <h4>☁️ Plataformas Cloud</h4>
+        <div id="skills" class="skills-row">
+          <div class="cert-card small">
+            <div style="font-weight:800">AWS</div>
+            <div class="bloque1">
+              <img src="./images/aws.png" alt="AWS">
+            </div>
+          </div>
+      
+          <div class="cert-card small">
+            <div style="font-weight:800">Azure</div>
+            <div class="bloque1">
+              <img src="./images/Azure.png" alt="Azure">
+            </div>
+          </div>
+      
+          <div class="cert-card small">
+            <div style="font-weight:800">Google Cloud Platform</div>
+            <div class="bloque1">
+              <img src="./images/GCP.png" alt="Google Cloud Platform">
+            </div>
+          </div>
+        </div>
+        <!-- Para poder poner el segundo bloque de abajo -->
+        <h4>🏗️ Infraestructura como Código (IaC)</h4>
+        <div id="skills" class="skills-row">
+          <div class="cert-card small">
+            <div style="font-weight:800">Terraform</div>
+            <div class="bloque1">
+              <img src="./images/terraform.png" alt="Terraform">
+            </div>
+          </div>
+        </div>
+
+        <h4>🐳 Contenedores y Orquestación</h4>
+        <div id="skills" class="skills-row">
+          <div class="cert-card small">
+            <div style="font-weight:800">Docker</div>
+            <div class="bloque1">
+              <img src="./images/docker.png" alt="Docker">
+            </div>
+          </div>
+
+          <div class="cert-card small">
+            <div style="font-weight:800">Kubernetes</div>
+            <div class="bloque1">
+              <img src="./images/kubernetes.png" alt="Kubernetes">
+            </div>
+          </div>
+        </div>
+
+        <h4>🔄 Integración y Entrega Continua (CI/CD)</h4>
+        <div id="skills" class="skills-row">
+          <div class="cert-card small">
+            <div style="font-weight:800">GitHub Actions</div>
+            <div class="bloque1">
+              <img src="./images/CI CD GitHub Actions.png" alt="GitHub Actions">
+            </div>
+          </div>
+
+          <div class="cert-card small">
+            <div style="font-weight:800">Jenkins</div>
+            <div class="bloque1">
+              <img src="./images/jenkins.jpg" alt="Jenkins">
+            </div>
+          </div>
+        </div>
+
+        <h4>💻 Lenguajes y Scripting</h4>
+        <div id="skills" class="skills-row">
+          <div class="cert-card small">
+            <div style="font-weight:800">Python</div>
+            <div class="bloque1">
+              <img src="./images/logo_python_1.png" alt="Python">
+            </div>
+          </div>
+
+          <div class="cert-card small">
+            <div style="font-weight:800">Bash</div>
+            <div class="bloque1">
+              <img src="./images/logo bash.png" alt="Bash">
+            </div>
+          </div>
+
+          <div class="cert-card small">
+            <div style="font-weight:800">PowerShell</div>
+            <div class="bloque1">
+              <img src="./images/logo powershell.png" alt="PowerShell">
+            </div>
+          </div>
+        </div>
+
+        <h4>🔐 Seguridad en la Nube</h4>
+        <div id="skills" class="skills-row">
+          <div class="cert-card small">
+            <div style="font-weight:800">IAM (Identity and Access Management)</div>
+            <div class="bloque1">
+              <img src="./images/logo aws iam.png" alt="IAM (Identity and Access Management)">
+            </div>
+          </div>
+
+          <div class="cert-card small">
+            <div style="font-weight:800">Control de acceso y gestión de políticas (RBAC / SCP)</div>
+            <div class="bloque1">
+              <img src="./images/rbac logo.jpg" alt="Control de acceso y gestión de políticas (RBAC)">
+            </div>
+          </div>
+        </div>
+
+        <h4>🌐 Sistemas y Redes</h4>
+        <div id="skills" class="skills-row">
+          <div class="cert-card small">
+            <div style="font-weight:800">Ubuntu Server / Linux Administration</div>
+            <div class="bloque1">
+              <img src="./images/linux_logo.png" alt="Ubuntu Server / Linux Administration">
+            </div>
+          </div>
+
+          <div class="cert-card small">
+            <div style="font-weight:800">Configuración de red</div>
+            <div class="bloque1">
+              <img src="./images/network.png" alt="Configuración de red">
+            </div>
+          </div>
+
+          <div class="cert-card small">
+            <div style="font-weight:800">DHCP / DNS (BIND)</div>
+            <div class="bloque1">
+              <img src="./images/DHCP - DNS (BIND).png" alt="DHCP / DNS (BIND)">
+            </div>
+          </div>
+        </div>
+
+        <div id="skills" class="skills-row">
+          <div class="cert-card small">
+            <div style="font-weight:800">Enrutamiento y NAT</div>
+            <div class="bloque1">
+              <img src="./images/NAT.jpg" alt="Enrutamiento y NAT">
+            </div>
+          </div>
+
+          <div class="cert-card small">
+            <div style="font-weight:800">NGINX</div>
+            <div class="bloque1">
+              <img src="./images/nginx_logo.png" alt="NGINX">
+            </div>
+          </div>
+
+          <div class="cert-card small">
+            <div style="font-weight:800">Gestión de cortafuegos</div>
+            <div class="bloque1">
+              <img src="./images/cortafuegos_logo.jpg" alt="Gestión de cortafuegos (iptables)">
+            </div>
+          </div>
+        </div>        
+
+        <h4>📊 Observabilidad y Monitoreo</h4>
+        <div id="skills" class="skills-row">
+          <div class="cert-card small">
+            <div style="font-weight:800">Elastic (ELK Stack)</div>
+            <div class="bloque1">
+              <img src="./images/logo elk.png" alt="Python Essentials 2">
+            </div>
+          </div>
+
+          <div class="cert-card small">
+            <div style="font-weight:800">Prometheus</div>
+            <div class="bloque1">
+              <img src="./images/logo Prometheus.png" alt="Prometheus">
+            </div>
+          </div>
+
+          <div class="cert-card small">
+            <div style="font-weight:800">Grafana</div>
+            <div class="bloque1">
+              <img src="./images/logo grafana.png" alt="Grafana">
+            </div>
+          </div>
+
+          <div class="cert-card small">
+            <div style="font-weight:800">Site 24x7</div>
+            <div class="bloque1">
+              <img src="./images/logo Site 24x7.jpg" alt="Site 24x7">
+            </div>
+          </div>
+
+        </div>
+      </section>
+<!-- Certificaciones -->
+      <section id="certs" class="fade-up delay-3" style="margin-top:18px">
+        <h2>Certificaciones</h2>
+      
+        <div id="certs" class="certs-row">
+
+          <div class="cert-card small">
+            <div style="font-weight:800">Azure Fundamentals — AZ-900</div>
+            <div class="bloque1">
+              <img src="./images/logo_AZ-900.png" alt="Certificación Azure Fundamentals - AZ-900">
+            </div>
+          </div>
+
+          <div class="cert-card small">
+            <div style="font-weight:800">Azure AI Fundamentals — AI-900</div>
+            <div class="bloque1">
+              <img src="./images/logo_AI-900.png" alt="Certificación Azure AI Fundamentals - AI-900">
+            </div>
+          </div>
+      
+          <div class="cert-card small">
+            <div style="font-weight:800">Full Stack Observability Practitioner</div>
+            <div class="bloque1">
+              <img src="./images/logo New Relic.png" alt="Full Stack Observability Practitioner">
+            </div>
+          </div>
+
+  
+        </div>
+        <!-- Para poder poner el segundo bloque de abajo -->
+      
+        <div id="certs" class="certs-row">
+          <div class="cert-card small">
+            <div style="font-weight:800">Python Essentials 2</div>
+            <div class="bloque1">
+              <img src="./images/logo_python.png" alt="Python Essentials 2">
+            </div>
+          </div>
+
+          <div class="cert-card small">
+            <div style="font-weight:800">Cybersecurity Awareness - CAPC</div>
+            <div class="bloque1">
+              <img src="./images/Cybersecurity Awareness - CAPC.png" alt="Cybersecurity Awareness - CAPC">
+            </div>
+          </div>
+
+          <div class="cert-card small">
+            <div style="font-weight:800">Cybersecurity Awareness Learner 2025</div>
+            <div class="bloque1">
+              <img src="./images/Cybersecurity Awareness Learner 2025.png" alt="Cybersecurity Awareness Learner 2025">
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Para poder poner el tercer bloque de abajo -->
+
+        <div id="certs" class="certs-row">
+          <div class="cert-card small">
+            <div style="font-weight:800">Introduction to Cybersecurity</div>
+            <div class="bloque1">
+              <img src="./images/Introduction to Cybersecurity.png" alt="Introduction to Cybersecurity">
+            </div>
+          </div>
+        </div>        
+
+      </section>
+      
+
+      <section id="contact" class="fade-up delay-1" style="margin-top:18px">
+        <h2>Contacto</h2>
+        <p class="muted">La forma recomendada de contacto es por email o LinkedIn.</p>
+      
+        <div style="display:grid;grid-template-columns:1fr 320px;gap:16px;margin-top:12px">
+          <div>
+            <form class="contact-form" action="https://formspree.io/f/xblzpaqo" method="POST">
+              <input type="text" name="name" aria-label="Tu nombre" placeholder="Tu nombre" required />
+              <input type="email" name="email" aria-label="Tu email" placeholder="Tu email" required />
+              <textarea name="message" aria-label="Mensaje" placeholder="Mensaje" rows="5" required></textarea>
+              <button type="submit">Enviar mensaje</button>
+            </form>
+      
+            <p class="light" style="margin-top:8px">
+              O envía un email directamente a: <strong>davidbotellanicolas22@gmail.com</strong>
+            </p>
+          </div>
+      
+          <aside class="card small">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="font-weight:800">Enlaces</div>
+              <div class="light">GitHub: <a class="social" href="https://github.com/CyberShield22">CyberShield22</a></div>
+              <div class="light">LinkedIn: <a class="social" href="https://www.linkedin.com/in/david-botella-nicol%C3%A1s-1735992b2/">David Botella Nicolás</a></div>
+              <div class="light">Credly: <a class="social" href="https://www.credly.com/users/david-botella-nicolas">David Botella Nicolás</a></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+      
+      <script>
+      document.querySelector('.contact-form').addEventListener('submit', function(e){
+        e.preventDefault();
+        fetch(this.action, {
+          method: 'POST',
+          body: new FormData(this),
+          headers: { 'Accept': 'application/json' }
+        }).then(response => {
+          if (response.ok) {
+            alert('✅ Mensaje enviado correctamente. ¡Gracias por contactar!');
+            this.reset();
+          } else {
+            alert('❌ Hubo un problema al enviar tu mensaje.');
+          }
+        });
+      });
+      </script>
+      
+
+    </main>
+
+    <footer>
+      <div>© <strong>David</strong> — Cloud Engineer</div>
+    </footer>
+  </div>
+
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click',e=>{
+        const href=a.getAttribute('href');
+        if(href.length>1){
+          e.preventDefault();
+          document.querySelector(href).scrollIntoView({behavior:'smooth'});
+        }
+      })
+    })
+
+    const observer = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting) entry.target.classList.add('visible');
+      })
+    },{threshold:0.06});
+    document.querySelectorAll('.fade-up').forEach(el=>{
+      el.style.opacity=0;el.style.transform='translateY(8px)';observer.observe(el);
+    });
+
+    const visObserver = new IntersectionObserver((entries)=>{
+      entries.forEach((entry)=>{
+        if(entry.isIntersecting){
+          entry.target.style.opacity=1;entry.target.style.transform='none';entry.target.style.transition='opacity .9s,transform .9s';
+        }
+      })
+    },{threshold:0.12});
+    document.querySelectorAll('.fade-up').forEach(el=>visObserver.observe(el));
+  </script>
 </body>
 </html>
